@@ -6,6 +6,7 @@
 import UIKit
 
 class MainViewController: UIViewController {
+    private var items = [ProductDetail]()
     
     private var collectionView: UICollectionView! = nil
     
@@ -79,5 +80,28 @@ extension MainViewController {
             collectionView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -5),
             collectionView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
         ])
+    }
+}
+
+//MARK: DataSource
+extension MainViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return items.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        if segment.selectedSegmentIndex == 0 {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ListCell", for: indexPath)
+                    as? ListCollectionViewCell else { return UICollectionViewCell() }
+            cell.resetContent()
+            cell.configureContent(item: items[indexPath.row])
+            return cell
+        }
+        
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GridCell", for: indexPath)
+                as? GridCollectionViewCell else { return UICollectionViewCell() }
+        cell.resetContent()
+        cell.configureContent(item: items[indexPath.row])
+        return cell
     }
 }
