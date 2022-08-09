@@ -17,4 +17,13 @@ enum Product {
             return "items_per_page"
         }
     }
+    
+    var number: Int {
+        switch self {
+        case .page:
+            return 1
+        case .itemPerPage:
+            return 30
+        }
+    }
 }
