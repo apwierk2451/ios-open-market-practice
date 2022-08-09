@@ -7,10 +7,35 @@
 
 import Foundation
 
+enum URLHost {
+    case openMarket
+    
+    var url: String {
+        switch self {
+        case .openMarket:
+            return "https://market-training.yagom-academy.kr"
+        }
+    }
+}
+
+enum URLAdditionalPath {
+    case healthChecker
+    case product
+    
+    var value: String {
+        switch self {
+        case .healthChecker:
+            return "/healthChecker"
+        case .product:
+            return "/api/products"
+        }
+    }
+}
+
 protocol APIRequest {
     var method: HTTPMethod { get }
     var baseURL: String { get }
-    var headers: [String: String] { get }
+    var headers: [String: String]? { get }
     var query: [String: String] { get }
     var body: Data? { get }
     var path: String { get }
