@@ -57,7 +57,7 @@ extension APIRequest {
         
         urlRequest.httpBody = body
         urlRequest.httpMethod = method.name
-        headers.forEach {
+        headers?.forEach {
             urlRequest.addValue($0.value, forHTTPHeaderField: $0.key)
         }
         
