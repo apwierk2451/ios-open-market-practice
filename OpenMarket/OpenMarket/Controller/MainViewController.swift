@@ -8,7 +8,23 @@ import UIKit
 class MainViewController: UIViewController {
     
     private var collectionView: UICollectionView! = nil
-    private let segment = UISegmentedControl(items: LayoutStyle.allCases.map{ $0.text })
+    
+    private let listLayout: UICollectionViewLayout = {
+        let layout = UICollectionViewFlowLayout()
+        layout.minimumLineSpacing = 5
+        
+        return layout
+    }()
+    
+    private let girdLayout: UICollectionViewLayout = {
+        let layout = UICollectionViewFlowLayout()
+        layout.minimumLineSpacing = 5
+        layout.minimumInteritemSpacing = 5
+        
+        return layout
+    }()
+    
+    private let segment = UISegmentedControl(items: LayoutStyle.allCases.map { $0.text })
     
     override func viewDidLoad() {
         super.viewDidLoad()
