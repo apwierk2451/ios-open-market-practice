@@ -27,3 +27,17 @@ enum Product {
         }
     }
 }
+
+enum LayoutStyle: CaseIterable {
+    case list
+    case grid
+    
+    var text: String {
+        switch self {
+        case .list:
+            return "List"
+        case .grid:
+            return "Grid"
+        }
+    }
+}
