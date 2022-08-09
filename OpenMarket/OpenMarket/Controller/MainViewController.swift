@@ -30,6 +30,7 @@ class MainViewController: UIViewController {
         super.viewDidLoad()
         self.view.backgroundColor = .systemBackground
         configureSegment()
+        configureCollectionView()
     }
     
 }
@@ -59,5 +60,24 @@ extension MainViewController {
         default:
             return
         }
+    }
+}
+
+//MARK: ListFlowLayout
+extension MainViewController {
+    private func configureCollectionView() {
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: listLayout)
+        collectionView.decelerationRate = .fast
+        collectionView.register(ListCollectionViewCell.self, forCellWithReuseIdentifier: "ListCell")
+        collectionView.register(GridCollectionViewCell.self, forCellWithReuseIdentifier: "GridCell")
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(collectionView)
+        
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 5),
+            collectionView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -5),
+            collectionView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
+        ])
     }
 }
