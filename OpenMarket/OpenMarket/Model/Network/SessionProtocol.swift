@@ -8,5 +8,6 @@
 import Foundation
 
 protocol SessionProtocol {
-    func dataTast<T: Decodable>(request: URLRequest, completionHandler: @escaping (Result<T, Error>) -> Void)
+    func dataTask(with request: APIRequest,
+                                completionHandler: @escaping (Result<Data, Error>) -> Void)
 }
