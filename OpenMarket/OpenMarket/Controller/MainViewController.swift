@@ -68,6 +68,8 @@ extension MainViewController {
 extension MainViewController {
     private func configureCollectionView() {
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: listLayout)
+        collectionView.dataSource = self
+        collectionView.delegate = self
         collectionView.decelerationRate = .fast
         collectionView.register(ListCollectionViewCell.self, forCellWithReuseIdentifier: "ListCell")
         collectionView.register(GridCollectionViewCell.self, forCellWithReuseIdentifier: "GridCell")
@@ -103,5 +105,24 @@ extension MainViewController: UICollectionViewDataSource {
         cell.resetContent()
         cell.configureContent(item: items[indexPath.row])
         return cell
+    }
+}
+
+// MARK: - FlowLayout
+extension MainViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        if segment.selectedSegmentIndex == 0 {
+            let width = self.collectionView.bounds.width
+            let height = self.collectionView.bounds.height * 0.1
+            let itemSize = CGSize(width: width, height: height)
+            
+            return itemSize
+        } else {
+            let width = self.collectionView.bounds.width / 2
+            let height = self.collectionView.bounds.height * 0.31
+            let itemSize = CGSize(width: width, height: height)
+            
+            return itemSize
+        }
     }
 }
