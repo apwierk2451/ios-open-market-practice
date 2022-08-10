@@ -18,12 +18,12 @@ enum Product {
         }
     }
     
-    var number: String {
+    var number: Int {
         switch self {
         case .page:
-            return "1"
+            return 1
         case .itemPerPage:
-            return "30"
+            return 10
         }
     }
 }

@@ -8,9 +8,19 @@ import UIKit
 class MainViewController: UIViewController {
     private var items: [ProductDetail] = []
     private let networkManager = NetworkManager()
-    private let openMarketRequest = OpenMarketRequest(method: .get, baseURL: URLHost.openMarket.url, query: [Product.page.text: Product.page.number, Product.itemPerPage.text: Product.itemPerPage.number], path: URLAdditionalPath.product.value)
+    private var openMarketRequest = OpenMarketRequest(method: .get, baseURL: URLHost.openMarket.url, query: [Product.page.text: String(Product.page.number), Product.itemPerPage.text: String(Product.itemPerPage.number)], path: URLAdditionalPath.product.value)
+    private var activityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView()
+        indicator.backgroundColor = .black.withAlphaComponent(0.3)
+        indicator.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
+        
+        return indicator
+    }()
+    private var isPageRefreshing = true
     
     private var collectionView: UICollectionView! = nil
+    
+    private var currentPage = 1
     
     private let listLayout: UICollectionViewLayout = {
         let layout = UICollectionViewFlowLayout()
@@ -19,9 +29,9 @@ class MainViewController: UIViewController {
         return layout
     }()
     
-    private let girdLayout: UICollectionViewLayout = {
+    private let gridLayout: UICollectionViewLayout = {
         let layout = UICollectionViewFlowLayout()
-        layout.minimumLineSpacing = 5
+        layout.minimumLineSpacing = 10
         layout.minimumInteritemSpacing = 5
         
         return layout
@@ -35,6 +45,8 @@ class MainViewController: UIViewController {
         configureSegment()
         fetchData()
         configureCollectionView()
+        addIndicatorLayout()
+        activityIndicator.hidesWhenStopped = true
     }
     
     private func fetchData() {
@@ -45,7 +57,8 @@ class MainViewController: UIViewController {
                 self.items.append(contentsOf: itemData.pages)
                 
                 DispatchQueue.main.async { [self] in
-                    self.collectionView.reloadData()
+                    collectionView.reloadData()
+                    activityIndicator.stopAnimating()
                 }
                 
             case .failure(let error):
@@ -75,9 +88,17 @@ extension MainViewController {
     @objc private func tapSegment(sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
         case 0:
-            print("0")
+            DispatchQueue.main.async { [self] in
+                let indexPath = collectionView.indexPathsForVisibleItems
+                collectionView.reloadItems(at: indexPath)
+            }
+            collectionView.setCollectionViewLayout(listLayout, animated: true)
         case 1:
-            print("1")
+            DispatchQueue.main.async { [self] in
+                let indexPath = collectionView.indexPathsForVisibleItems
+                collectionView.reloadItems(at: indexPath)
+            }
+            collectionView.setCollectionViewLayout(gridLayout, animated: true)
         default:
             return
         }
@@ -138,11 +159,60 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
             
             return itemSize
         } else {
-            let width = self.collectionView.bounds.width / 2
-            let height = self.collectionView.bounds.height * 0.31
+            let width = self.collectionView.bounds.width * 0.48
+            let height = self.collectionView.bounds.height * 0.34
             let itemSize = CGSize(width: width, height: height)
             
             return itemSize
         }
+    }
+}
+
+extension MainViewController: UICollectionViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offsetY = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height - scrollView.frame.height
+        
+        if offsetY > contentHeight && isPageRefreshing {
+            activityIndicator.startAnimating()
+            currentPage += 1
+            startFetching()
+            self.activityIndicator.stopAnimating()
+        }
+    }
+}
+extension MainViewController {
+    private func startFetching() {
+        openMarketRequest.query = [Product.page.text: String(Product.page.number + currentPage), Product.itemPerPage.text: String(Product.itemPerPage.number)]
+        isPageRefreshing = false
+        networkManager.dataTask(with: openMarketRequest) { result in
+            switch result {
+            case .success(let responseData):
+                guard let itemData: ProductsList = try? JSONDecoder().decode(ProductsList.self, from: responseData) else { return }
+                self.items.append(contentsOf: itemData.pages)
+                
+                DispatchQueue.main.async { [self] in
+                    collectionView.reloadData()
+                    isPageRefreshing = true
+                    activityIndicator.stopAnimating()
+                }
+            case .failure(let error):
+                print(error)
+                return
+            }
+        }
+    }
+    
+    private func addIndicatorLayout() {
+        view.addSubview(activityIndicator)
+        
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            activityIndicator.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            activityIndicator.topAnchor.constraint(equalTo: view.topAnchor),
+            activityIndicator.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            activityIndicator.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
     }
 }
