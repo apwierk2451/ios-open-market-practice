@@ -43,14 +43,13 @@ class MainViewController: UIViewController {
         super.viewDidLoad()
         self.view.backgroundColor = .systemBackground
         configureSegment()
-        fetchData()
+        fetchData(openMarketRequest)
         configureCollectionView()
         addIndicatorLayout()
-        activityIndicator.hidesWhenStopped = true
     }
     
-    private func fetchData() {
-        networkManager.dataTask(with: openMarketRequest) { result in
+    private func fetchData(_ request: OpenMarketRequest) {
+        networkManager.dataTask(with: request) { result in
             switch result {
             case .success(let responseData):
                 guard let itemData: ProductsList = try? JSONDecoder().decode(ProductsList.self, from: responseData) else { return }
@@ -176,33 +175,12 @@ extension MainViewController: UICollectionViewDelegate {
         if offsetY > contentHeight && isPageRefreshing {
             activityIndicator.startAnimating()
             currentPage += 1
-            startFetching()
-            self.activityIndicator.stopAnimating()
+            openMarketRequest.query = [Product.page.text: String(Product.page.number + currentPage), Product.itemPerPage.text: String(Product.itemPerPage.number)]
+            fetchData(openMarketRequest)
         }
     }
 }
 extension MainViewController {
-    private func startFetching() {
-        openMarketRequest.query = [Product.page.text: String(Product.page.number + currentPage), Product.itemPerPage.text: String(Product.itemPerPage.number)]
-        isPageRefreshing = false
-        networkManager.dataTask(with: openMarketRequest) { result in
-            switch result {
-            case .success(let responseData):
-                guard let itemData: ProductsList = try? JSONDecoder().decode(ProductsList.self, from: responseData) else { return }
-                self.items.append(contentsOf: itemData.pages)
-                
-                DispatchQueue.main.async { [self] in
-                    collectionView.reloadData()
-                    isPageRefreshing = true
-                    activityIndicator.stopAnimating()
-                }
-            case .failure(let error):
-                print(error)
-                return
-            }
-        }
-    }
-    
     private func addIndicatorLayout() {
         view.addSubview(activityIndicator)
         
