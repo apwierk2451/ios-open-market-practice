@@ -6,7 +6,9 @@
 import UIKit
 
 class MainViewController: UIViewController {
-    private var items = [ProductDetail]()
+    private var items: [ProductDetail] = []
+    private let networkManager = NetworkManager()
+    private let openMarketRequest = OpenMarketRequest(method: .get, baseURL: URLHost.openMarket.url, query: [Product.page.text: Product.page.number, Product.itemPerPage.text: Product.itemPerPage.number], path: URLAdditionalPath.product.value)
     
     private var collectionView: UICollectionView! = nil
     
@@ -31,9 +33,27 @@ class MainViewController: UIViewController {
         super.viewDidLoad()
         self.view.backgroundColor = .systemBackground
         configureSegment()
+        fetchData()
         configureCollectionView()
     }
     
+    private func fetchData() {
+        networkManager.dataTask(with: openMarketRequest) { result in
+            switch result {
+            case .success(let responseData):
+                guard let itemData: ProductsList = try? JSONDecoder().decode(ProductsList.self, from: responseData) else { return }
+                self.items.append(contentsOf: itemData.pages)
+                
+                DispatchQueue.main.async { [self] in
+                    self.collectionView.reloadData()
+                }
+                
+            case .failure(let error):
+                print(error)
+                return
+            }
+        }
+    }
 }
 
 //MARK: SegmentControl

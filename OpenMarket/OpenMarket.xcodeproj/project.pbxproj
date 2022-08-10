@@ -25,6 +25,7 @@
 		4D15B03528A29B190040DF0A /* GridCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D15B03428A29B190040DF0A /* GridCollectionViewCell.swift */; };
 		4D15B03828A29C450040DF0A /* Int + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D15B03728A29C450040DF0A /* Int + Extension.swift */; };
 		4D15B03A28A29D130040DF0A /* UIImageView + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D15B03928A29D130040DF0A /* UIImageView + Extension.swift */; };
+		4D35038928A3789000A91BAE /* OpenMarketRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D35038828A3789000A91BAE /* OpenMarketRequest.swift */; };
 		C70FB0FB25BEF61C00C9924E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70FB0FA25BEF61C00C9924E /* AppDelegate.swift */; };
 		C70FB0FD25BEF61C00C9924E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70FB0FC25BEF61C00C9924E /* SceneDelegate.swift */; };
 		C70FB0FF25BEF61C00C9924E /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70FB0FE25BEF61C00C9924E /* MainViewController.swift */; };
@@ -62,6 +63,7 @@
 		4D15B03428A29B190040DF0A /* GridCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridCollectionViewCell.swift; sourceTree = "<group>"; };
 		4D15B03728A29C450040DF0A /* Int + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int + Extension.swift"; sourceTree = "<group>"; };
 		4D15B03928A29D130040DF0A /* UIImageView + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView + Extension.swift"; sourceTree = "<group>"; };
+		4D35038828A3789000A91BAE /* OpenMarketRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenMarketRequest.swift; sourceTree = "<group>"; };
 		C70FB0F725BEF61C00C9924E /* OpenMarket.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenMarket.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C70FB0FA25BEF61C00C9924E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C70FB0FC25BEF61C00C9924E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -163,6 +165,7 @@
 				18B8A07E28A2472700E8EE56 /* SessionProtocol.swift */,
 				18B8A08028A24D2D00E8EE56 /* APIRequest.swift */,
 				18B8A08228A24DE800E8EE56 /* HTTPMethod.swift */,
+				4D35038828A3789000A91BAE /* OpenMarketRequest.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -326,6 +329,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				18B8A07D28A2416F00E8EE56 /* ListCollectionViewCell.swift in Sources */,
+				4D35038928A3789000A91BAE /* OpenMarketRequest.swift in Sources */,
 				18B8A0A228A27BD300E8EE56 /* CodableError.swift in Sources */,
 				18B8A07B28A240F700E8EE56 /* NetworkManager.swift in Sources */,
 				C70FB0FF25BEF61C00C9924E /* MainViewController.swift in Sources */,
