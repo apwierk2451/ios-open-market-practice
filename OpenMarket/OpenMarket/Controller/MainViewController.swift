@@ -8,7 +8,6 @@ import UIKit
 class MainViewController: UIViewController {
     private var items: [ProductDetail] = []
     private let networkManager = NetworkManager()
-    private var openMarketRequest = OpenMarketRequest(method: .get, baseURL: URLHost.openMarket.url, query: [Product.page.text: String(Product.page.number), Product.itemPerPage.text: String(Product.itemPerPage.number)], path: URLAdditionalPath.product.value)
     private var activityIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView()
         indicator.backgroundColor = .black.withAlphaComponent(0.3)
@@ -20,7 +19,7 @@ class MainViewController: UIViewController {
     
     private var collectionView: UICollectionView! = nil
     
-    private var currentPage = 0
+    private var currentPage = 1
     
     private let listLayout: UICollectionViewLayout = {
         let layout = UICollectionViewFlowLayout()
@@ -43,19 +42,21 @@ class MainViewController: UIViewController {
         super.viewDidLoad()
         self.view.backgroundColor = .systemBackground
         configureSegment()
-        fetchData(openMarketRequest)
+        fetchData()
         configureCollectionView()
         addIndicatorLayout()
         self.activityIndicator.startAnimating()
     }
     
-    private func fetchData(_ request: OpenMarketRequest) {
+    private func fetchData() {
         isPageRefreshing = false
-        networkManager.dataTask(with: request) { result in
+        let openMarketRequest = OpenMarketRequest(method: .get, baseURL: URLHost.openMarket.url, query: [Product.page.text: String(currentPage), Product.itemPerPage.text: String(Product.itemPerPage.number)], path: URLAdditionalPath.product.value)
+        networkManager.dataTask(with: openMarketRequest) { [self] result in
             switch result {
             case .success(let responseData):
                 guard let itemData: ProductsList = try? JSONDecoder().decode(ProductsList.self, from: responseData) else { return }
                 self.items.append(contentsOf: itemData.pages)
+                currentPage = itemData.pageNumber
                 
                 DispatchQueue.main.async { [self] in
                     collectionView.reloadData()
@@ -114,6 +115,7 @@ extension MainViewController {
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: listLayout)
         collectionView.dataSource = self
         collectionView.delegate = self
+        collectionView.decelerationRate = .fast
         collectionView.register(ListCollectionViewCell.self, forCellWithReuseIdentifier: "ListCell")
         collectionView.register(GridCollectionViewCell.self, forCellWithReuseIdentifier: "GridCell")
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -175,13 +177,11 @@ extension MainViewController: UICollectionViewDelegate {
         let offsetY = scrollView.contentOffset.y
         let contentHeight = scrollView.contentSize.height - scrollView.frame.height
        
-        if offsetY > contentHeight && isPageRefreshing {
+        if offsetY > contentHeight + 100 && isPageRefreshing {
             activityIndicator.startAnimating()
             currentPage += 1
-            openMarketRequest.query = [Product.page.text: String(Product.page.number + currentPage), Product.itemPerPage.text: String(Product.itemPerPage.number)]
-            fetchData(openMarketRequest)
+            fetchData()
         }
-       
     }
 }
 

@@ -23,7 +23,7 @@ enum Product {
         case .page:
             return 1
         case .itemPerPage:
-            return 10
+            return 30
         }
     }
 }

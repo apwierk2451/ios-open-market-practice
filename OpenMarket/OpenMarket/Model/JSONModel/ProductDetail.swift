@@ -13,7 +13,7 @@ struct ProductDetail: Decodable {
     let currency: Currency
     let price: Double
     let bargainPrice: Double
-    let discountedPrice: Int
+    let discountedPrice: Double
     let stock: Int
     let createdAt: String
     let issuedAt: String
