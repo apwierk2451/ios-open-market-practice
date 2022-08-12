@@ -98,7 +98,7 @@ class APIRequestTest: XCTestCase {
     func test_PATCH_메서드_동작확인() {
         //given
         let expectation = expectation(description: "비동기테스트")
-       
+        
         let product = RegistrationProduct(name: "수정수정",
                                           descriptions: "화이팅",
                                           price: 15000.0,
@@ -123,6 +123,55 @@ class APIRequestTest: XCTestCase {
             }
             expectation.fulfill()
         }
+        wait(for: [expectation], timeout: 300)
+    }
+    
+    func test_POST_Secret() {
+        //given
+        let expectation = expectation(description: "비동기 요청을 기다림.")
+        let networkManager = NetworkManager()
+        let body = SecretProducts(secret: UserInfo.secret.text)
+        guard let data = try? JSONEncoder().encode(body) else { return }
+        let deleteRequest = TestRequest(body: .json(data),
+                                        path: URLAdditionalPath.product.value + "/4521/secret",
+                                        method: .post,
+                                        baseURL: URLHost.openMarket.url ,
+                                        headers: ["identifier": UserInfo.identifier.text,
+                                                  "Content-Type" : "application/json"])
+        networkManager.dataTask(with: deleteRequest) { (result: Result<Data, Error>) in
+            switch result {
+            case .success(let success):
+                print(String(decoding: success, as: UTF8.self))
+            case .failure(let error):
+                print(error)
+                break
+            }
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: 300)
+    }
+    
+    func test_DELETE_메서드_동작확인() {
+        // given
+        let expectation = expectation(description: "비동기 요청을 기다림.")
+        let networkManager = NetworkManager()
+        let deleteRequest = TestRequest(path: URLAdditionalPath.product.value + "/4521/c4ac3ef5-1a03-11ed-9676-49deb877d7ab",
+                                        method: .delete,
+                                        baseURL: URLHost.openMarket.url,
+                                        headers: ["identifier": UserInfo.identifier.text,
+                                                  "Content-Type" : "application/json"])
+        networkManager.dataTask(with: deleteRequest) { (result: Result<Data, Error>) in
+            switch result {
+            case .success(let success):
+                print(String(decoding: success, as: UTF8.self))
+            case .failure(let error):
+                print(error)
+                break
+            }
+            expectation.fulfill()
+        }
+        
         wait(for: [expectation], timeout: 300)
     }
 }
