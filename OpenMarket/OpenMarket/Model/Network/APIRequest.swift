@@ -78,7 +78,7 @@ extension APIRequest {
         urlRequest.httpBody = createHTTPBody()
         urlRequest.httpMethod = method.name
         headers?.forEach {
-            urlRequest.addValue($0, forHTTPHeaderField: $1)
+            urlRequest.addValue($0.value, forHTTPHeaderField: $0.key)
         }
         
         return urlRequest
@@ -111,7 +111,7 @@ extension APIRequest {
         }
         
         requestBody.append("\(lineBreak)--\(form.boundary)--\(lineBreak)")
-   
+        print(String(decoding: requestBody, as: UTF8.self))
         return requestBody
     }
     

@@ -85,7 +85,7 @@ class APIRequestTest: XCTestCase {
         networkManager.dataTask(with: request) { result in
             switch result {
             case .success(let success):
-                print(success)
+                print(String(decoding: success, as: UTF8.self))
             case .failure(let error):
                 print(error.localizedDescription)
                 break
