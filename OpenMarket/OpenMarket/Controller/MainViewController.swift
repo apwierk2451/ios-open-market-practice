@@ -46,6 +46,7 @@ class MainViewController: UIViewController {
         fetchData(openMarketRequest)
         configureCollectionView()
         addIndicatorLayout()
+        self.activityIndicator.startAnimating()
     }
     
     private func fetchData(_ request: OpenMarketRequest) {
@@ -59,7 +60,9 @@ class MainViewController: UIViewController {
                     collectionView.reloadData()
                     activityIndicator.stopAnimating()
                 }
-                
+                if itemData.hasNext {
+                    self.isPageRefreshing = true
+                }
             case .failure(let error):
                 print(error)
                 return
@@ -175,11 +178,14 @@ extension MainViewController: UICollectionViewDelegate {
         if offsetY > contentHeight && isPageRefreshing {
             activityIndicator.startAnimating()
             currentPage += 1
+            isPageRefreshing = false
             openMarketRequest.query = [Product.page.text: String(Product.page.number + currentPage), Product.itemPerPage.text: String(Product.itemPerPage.number)]
             fetchData(openMarketRequest)
         }
+       
     }
 }
+
 extension MainViewController {
     private func addIndicatorLayout() {
         view.addSubview(activityIndicator)
