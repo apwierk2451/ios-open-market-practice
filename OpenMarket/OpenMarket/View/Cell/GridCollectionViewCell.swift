@@ -2,7 +2,7 @@
 //  GridCollectionViewCell.swift
 //  OpenMarket
 //
-//  Created by Kiwon Song on 2022/08/09.
+//  Created by bonf, kiwi on 2022/08/09.
 //
 
 import UIKit
