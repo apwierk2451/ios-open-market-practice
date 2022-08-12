@@ -12,6 +12,7 @@
 		184EF1AE28A2961900B70C3A /* MockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18B8A09828A26C0F00E8EE56 /* MockData.swift */; };
 		184EF1AF28A2962600B70C3A /* Products.json in Resources */ = {isa = PBXBuildFile; fileRef = 18B8A09428A2684C00E8EE56 /* Products.json */; };
 		188BFCD028A5FE2100C2EA3A /* Data + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188BFCCF28A5FE2100C2EA3A /* Data + Extension.swift */; };
+		188BFCD228A672A200C2EA3A /* RegistProductViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188BFCD128A672A200C2EA3A /* RegistProductViewController.swift */; };
 		18B8A07B28A240F700E8EE56 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18B8A07A28A240F700E8EE56 /* NetworkManager.swift */; };
 		18B8A07D28A2416F00E8EE56 /* ListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18B8A07C28A2416F00E8EE56 /* ListCollectionViewCell.swift */; };
 		18B8A07F28A2472700E8EE56 /* SessionProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18B8A07E28A2472700E8EE56 /* SessionProtocol.swift */; };
@@ -50,6 +51,7 @@
 
 /* Begin PBXFileReference section */
 		188BFCCF28A5FE2100C2EA3A /* Data + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data + Extension.swift"; sourceTree = "<group>"; };
+		188BFCD128A672A200C2EA3A /* RegistProductViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistProductViewController.swift; sourceTree = "<group>"; };
 		18B8A07A28A240F700E8EE56 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		18B8A07C28A2416F00E8EE56 /* ListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCollectionViewCell.swift; sourceTree = "<group>"; };
 		18B8A07E28A2472700E8EE56 /* SessionProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionProtocol.swift; sourceTree = "<group>"; };
@@ -105,6 +107,7 @@
 			isa = PBXGroup;
 			children = (
 				C70FB0FE25BEF61C00C9924E /* MainViewController.swift */,
+				188BFCD128A672A200C2EA3A /* RegistProductViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -355,6 +358,7 @@
 				18B8A0A828A27F7800E8EE56 /* NameSpace.swift in Sources */,
 				4D15B03A28A29D130040DF0A /* UIImageView + Extension.swift in Sources */,
 				188BFCD028A5FE2100C2EA3A /* Data + Extension.swift in Sources */,
+				188BFCD228A672A200C2EA3A /* RegistProductViewController.swift in Sources */,
 				4D22E67B28A63957008B5A5E /* ImageCacheManager.swift in Sources */,
 				4D15B03328A258330040DF0A /* APIError.swift in Sources */,
 				4D15B02F28A243A30040DF0A /* Currency.swift in Sources */,

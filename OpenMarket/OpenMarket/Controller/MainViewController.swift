@@ -45,6 +45,7 @@ class MainViewController: UIViewController {
         fetchData()
         configureCollectionView()
         addIndicatorLayout()
+        configureNavigationBarRightButton()
         self.activityIndicator.startAnimating()
     }
     
@@ -70,6 +71,15 @@ class MainViewController: UIViewController {
                 return
             }
         }
+    }
+    
+    private func configureNavigationBarRightButton() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(showRegistView))
+    }
+    
+    @objc private func showRegistView() {
+        let registViewController = RegistProductViewController()
+        self.navigationController?.pushViewController(registViewController, animated: true)
     }
 }
 
