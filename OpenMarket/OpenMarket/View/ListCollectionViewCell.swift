@@ -116,7 +116,7 @@ class ListCollectionViewCell: UICollectionViewCell {
         stockLabel.textColor = .systemGray
         discountedLabel.text = "\(item.currency.rawValue) \(item.discountedPrice)"
         discountedLabel.textColor = .systemGray
-        thumbnailView.fetchImageData(url: item.thumbnail)
+        thumbnailView.setImageUrl(url: item.thumbnail)
         
         if item.bargainPrice != 0 {
             spacingView.isHidden = false
@@ -144,5 +144,6 @@ class ListCollectionViewCell: UICollectionViewCell {
         spacingView.isHidden = true
         priceLabel.text = .none
         priceLabel.attributedText = .none
+        thumbnailView.image = .none
     }
 }

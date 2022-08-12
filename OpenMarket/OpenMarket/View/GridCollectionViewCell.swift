@@ -76,7 +76,7 @@ class GridCollectionViewCell: UICollectionViewCell {
         stockLabel.textColor = .systemGray
         discountedLabel.text = "\(item.currency.rawValue) \(item.discountedPrice)"
         discountedLabel.textColor = .systemGray
-        itemImageView.fetchImageData(url: item.thumbnail)
+        itemImageView.setImageUrl(url: item.thumbnail)
         
         if item.bargainPrice != 0 {
             discountedLabel.text = "\(item.currency.rawValue) \(item.discountedPrice)"
@@ -105,5 +105,6 @@ class GridCollectionViewCell: UICollectionViewCell {
     func resetContent() {
         priceLabel.text = .none
         priceLabel.attributedText = .none
+        itemImageView.image = .none
     }
 }

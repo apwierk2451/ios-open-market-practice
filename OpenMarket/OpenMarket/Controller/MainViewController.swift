@@ -20,7 +20,7 @@ class MainViewController: UIViewController {
     
     private var collectionView: UICollectionView! = nil
     
-    private var currentPage = 1
+    private var currentPage = 0
     
     private let listLayout: UICollectionViewLayout = {
         let layout = UICollectionViewFlowLayout()
@@ -50,6 +50,7 @@ class MainViewController: UIViewController {
     }
     
     private func fetchData(_ request: OpenMarketRequest) {
+        isPageRefreshing = false
         networkManager.dataTask(with: request) { result in
             switch result {
             case .success(let responseData):
@@ -113,7 +114,6 @@ extension MainViewController {
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: listLayout)
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.decelerationRate = .fast
         collectionView.register(ListCollectionViewCell.self, forCellWithReuseIdentifier: "ListCell")
         collectionView.register(GridCollectionViewCell.self, forCellWithReuseIdentifier: "GridCell")
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -174,11 +174,10 @@ extension MainViewController: UICollectionViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let offsetY = scrollView.contentOffset.y
         let contentHeight = scrollView.contentSize.height - scrollView.frame.height
-        
+       
         if offsetY > contentHeight && isPageRefreshing {
             activityIndicator.startAnimating()
             currentPage += 1
-            isPageRefreshing = false
             openMarketRequest.query = [Product.page.text: String(Product.page.number + currentPage), Product.itemPerPage.text: String(Product.itemPerPage.number)]
             fetchData(openMarketRequest)
         }
