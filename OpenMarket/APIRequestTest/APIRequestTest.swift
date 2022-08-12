@@ -12,23 +12,34 @@ struct GetData: APIRequest {
     var method: HTTPMethod
     var baseURL: String
     var headers: [String: String]?
-    var query: [String: String]
+    var query: [String: String]?
     var body: HTTPBody?
     var path: String
 }
 
+struct TestRequest: APIRequest {
+    var body: HTTPBody?
+    var path: String
+    var boundary: String?
+    var method: HTTPMethod
+    var baseURL: String
+    var headers: [String: String]?
+    var query: [String: String]?
+}
+
 class APIRequestTest: XCTestCase {
     var sut: GetData!
+    let boundary = "Boundary-\(UUID().uuidString)"
     
     override func setUpWithError() throws {
-        sut = GetData(method: .get, baseURL: URLHost.openMarket.url, query: [Product.page.text: "1", Product.itemPerPage.text: "1"], path: "")
+      
     }
-
+    
     override func tearDownWithError() throws {
         sut = nil
     }
-
-    func testExample() {
+    
+    func test_GET_메서드_동작확인() {
         // given
         let expectation = expectation(description: "비동기테스트")
         let session = MockSession()
@@ -54,4 +65,34 @@ class APIRequestTest: XCTestCase {
         // then
         XCTAssertEqual(productName, result)
     }
+    
+    func test_POST_메서드_동작확인() {
+        //given
+        let expectation = expectation(description: "비동기테스트")
+        guard let assetImage = UIImage(named: "귀요미") else { return }
+        guard let pngData = assetImage.pngData() else { return }
+        let product = RegistrationProduct(name: "열심히하자",
+                                          descriptions: "화이팅",
+                                          price: 10000.0,
+                                          currency: "KRW",
+                                          discountedPrice: 0.0,
+                                          stock: 1,
+                                          secret: UserInfo.secret.text)
+        guard let productData = try? JSONEncoder().encode(product) else { return }
+        let multiPartFormData = MultiPartForm(boundary: boundary, jsonData: productData, images: [Image(name: "귀요미", data: pngData, type: "png")])
+        let networkManager = NetworkManager()
+        let request = TestRequest(body: .multiPartForm(multiPartFormData) ,path: URLAdditionalPath.product.value, method: .post, baseURL: URLHost.openMarket.url, headers: ["identifier": UserInfo.identifier.text, "Content-Type": "multipart/form-data; boundary=\(boundary)"])
+        networkManager.dataTask(with: request) { result in
+            switch result {
+            case .success(let success):
+                print(success)
+            case .failure(let error):
+                print(error.localizedDescription)
+                break
+            }
+            expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: 300)
+    }
 }
+

@@ -53,7 +53,7 @@ protocol APIRequest {
     var method: HTTPMethod { get }
     var baseURL: String { get }
     var headers: [String: String]? { get }
-    var query: [String: String] { get }
+    var query: [String: String]? { get }
     var body: HTTPBody? { get }
     var path: String { get }
 }
@@ -61,7 +61,10 @@ protocol APIRequest {
 extension APIRequest {
     var url: URL? {
         var urlComponents = URLComponents(string: baseURL + path)
+        
+        if let query = query {
         urlComponents?.queryItems = query.map { URLQueryItem(name: $0.key, value: "\($0.value)") }
+        }
         return urlComponents?.url
     }
     
@@ -108,7 +111,7 @@ extension APIRequest {
         }
         
         requestBody.append("\(lineBreak)--\(form.boundary)--\(lineBreak)")
-        
+   
         return requestBody
     }
     
