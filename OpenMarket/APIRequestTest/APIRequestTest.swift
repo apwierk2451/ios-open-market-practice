@@ -13,7 +13,7 @@ struct GetData: APIRequest {
     var baseURL: String
     var headers: [String: String]?
     var query: [String: String]
-    var body: Data?
+    var body: HTTPBody?
     var path: String
 }
 
