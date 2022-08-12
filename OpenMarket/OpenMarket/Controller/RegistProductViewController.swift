@@ -7,17 +7,26 @@
 
 import UIKit
 
-class RegistProductViewController: UIViewController, UICollectionViewDelegate {
+class RegistProductViewController: UIViewController, UICollectionViewDelegate, UIImagePickerControllerDelegate & UINavigationControllerDelegate {
     private var collectionView: UICollectionView! = nil
     private var layout = UICollectionViewFlowLayout()
+    var imagePicker = UIImagePickerController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .systemBackground
+        imagePicker.delegate = self
+        imagePicker.allowsEditing = true
+        imagePicker.sourceType = .photoLibrary
+        ImageCollectionViewCell.addImagebutton.addTarget(self, action: #selector(didAddImageButtonTapped), for: .touchUpInside)
         configureCollectionView()
         configureNavigationBar()
     }
     
+    @objc func didAddImageButtonTapped() {
+       present(imagePicker, animated: true)
+    }
+   
     private func configureNavigationBar() {
         let cancelBarButton = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(didCancelButtonTapped))
         let doneBarButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(didUpdateButtonTapped))
@@ -65,7 +74,6 @@ extension RegistProductViewController: UICollectionViewDataSource {
         if indexPath.section == 0 {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ProductImageCell", for: indexPath)
                     as? RegistProductImageCollectionViewCell else { return RegistProductImageCollectionViewCell() }
-            
             return cell
         } else {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ProductInfoCell", for: indexPath)
@@ -74,6 +82,7 @@ extension RegistProductViewController: UICollectionViewDataSource {
             return cell
         }
     }
+    
 }
 
 extension RegistProductViewController: UICollectionViewDelegateFlowLayout {
